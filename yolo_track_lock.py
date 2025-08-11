@@ -8,9 +8,8 @@ from pathlib import Path
 from collections import defaultdict
 import numpy as np
 
-# Define class names for the VISDRONE dataset
-#VISDRONE_CLASSES = ["person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
-VISDRONE_CLASSES = ["person", "cycle", "car", "HV", "background"]
+# Define class names for the dataset
+CLASSES = ["person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
 
 def get_jetson_camera():
     """Get camera using GStreamer pipeline for Jetson ARGUS camera"""
@@ -62,12 +61,12 @@ def parse_classes(classes_arg):
         try:
             # Try to parse as integer
             class_idx = int(cls)
-            if 0 <= class_idx < len(VISDRONE_CLASSES):
+            if 0 <= class_idx < len(CLASSES):
                 class_indices.append(class_idx)
         except ValueError:
             # Try to match as string
-            if cls in VISDRONE_CLASSES:
-                class_idx = VISDRONE_CLASSES.index(cls)
+            if cls in CLASSES:
+                class_idx = CLASSES.index(cls)
                 class_indices.append(class_idx)
     
     return class_indices if class_indices else None
@@ -289,12 +288,12 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
     
     # If a class name is provided for locking, convert it to a class ID
     if args.lock_class:
-        if args.lock_class in VISDRONE_CLASSES:
-            locked_class_id = VISDRONE_CLASSES.index(args.lock_class)
+        if args.lock_class in CLASSES:
+            locked_class_id = CLASSES.index(args.lock_class)
         else:
             try:
                 locked_class_id = int(args.lock_class)
-                if locked_class_id < 0 or locked_class_id >= len(VISDRONE_CLASSES):
+                if locked_class_id < 0 or locked_class_id >= len(CLASSES):
                     locked_class_id = None
             except ValueError:
                 locked_class_id = None
@@ -303,7 +302,7 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
     if locked_id is not None:
         print(f"Initially locked onto object ID: {locked_id}")
     if locked_class_id is not None:
-        print(f"Looking to lock onto class: {VISDRONE_CLASSES[locked_class_id]}")
+        print(f"Looking to lock onto class: {CLASSES[locked_class_id]}")
     
     # Create a window with a trackbar for object selection
     if args.display:
@@ -419,7 +418,7 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
                 for i, (box, track_id, class_id) in enumerate(zip(boxes, track_ids, class_ids)):
                     if class_id == locked_class_id:
                         locked_id = track_id
-                        print(f"Auto-locked onto object ID {locked_id} of class {VISDRONE_CLASSES[class_id]}")
+                        print(f"Auto-locked onto object ID {locked_id} of class {CLASSES[class_id]}")
                         break
             
             # For each detected object
@@ -436,7 +435,7 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
                     locked_object_info = {
                         'id': track_id,
                         'class_id': class_id,
-                        'class_name': VISDRONE_CLASSES[class_id] if class_id < len(VISDRONE_CLASSES) else f"class_{class_id}",
+                        'class_name': CLASSES[class_id] if class_id < len(CLASSES) else f"class_{class_id}",
                         'box': (int(x - w/2), int(y - h/2), int(w), int(h)),
                         'center': (int(x), int(y)),
                         'conf': conf
@@ -455,7 +454,7 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
                     cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), color, thickness)
                     
                     # Draw label
-                    class_name = VISDRONE_CLASSES[class_id] if class_id < len(VISDRONE_CLASSES) else f"class_{class_id}"
+                    class_name = CLASSES[class_id] if class_id < len(CLASSES) else f"class_{class_id}"
                     label = f"{class_name} {track_id} {conf:.2f}"
                     label_color = (0, 0, 0)  # Black text
                     label_bg_color = color
@@ -492,7 +491,7 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
                 
                 # Save track data if requested
                 if args.save_tracks and tracks_file:
-                    class_name = VISDRONE_CLASSES[class_id] if class_id < len(VISDRONE_CLASSES) else f"class_{class_id}"
+                    class_name = CLASSES[class_id] if class_id < len(CLASSES) else f"class_{class_id}"
                     is_locked_int = 1 if is_locked else 0
                     tracks_file.write(f"{frame_count},{track_id},{class_id},{class_name},{x},{y},{w},{h},{conf},{is_locked_int}\n")
             
@@ -682,4 +681,5 @@ def process_video_with_locking(model, args, is_camera=False, use_jetson_camera=F
     print(f"Tracking summary saved to: {results_path}")
 
 if __name__ == "__main__":
+
     main() 
