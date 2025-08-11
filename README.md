@@ -47,10 +47,10 @@ You can use either a prebuilt TensorRT engine (`.engine`) or export one from a Y
 ```bash
 python export_tensorrt_engine.py
 ```
-This script loads `yolo11nvisrec71.pt` and creates `yolo11nvisrec71.engine` with static shapes and FP16, suitable for Jetson.
+This script loads `yolo11n.pt` and creates `yolo11n.engine` with static shapes and FP16, suitable for Jetson.
 
 ### 2) Use an Existing Engine
-Place your engine file, e.g., `best.engine` or `yolo11nvisrec71.engine`, in the repository root (or pass a path via `--model`).
+Place your engine file, e.g., `best.engine` or `yolo11n.engine`, in the repository root (or pass a path via `--model`).
 
 ## Usage
 
@@ -59,7 +59,7 @@ Multi-object tracking with interactive object locking.
 
 ```bash
 python yolo_track_lock.py \
-  --model yolo11nvisrec71.engine \
+  --model yolo11n.engine \
   --source 0 \
   --conf-thres 0.25 \
   --iou-thres 0.7 \
@@ -93,15 +93,15 @@ Controls during runtime:
 Examples:
 - From a video file:
   ```bash
-  python yolo_track_lock.py --model yolo11nvisrec71.engine --source sample.mp4 --save-vid --enable-lock
+  python yolo_track_lock.py --model yolo11n.engine --source sample.mp4 --save-vid --enable-lock
   ```
 - From a USB camera:
   ```bash
-  python yolo_track_lock.py --model yolo11nvisrec71.engine --source 0 --show-tracks --enable-lock
+  python yolo_track_lock.py --model yolo11n.engine --source 0 --show-tracks --enable-lock
   ```
 - From Jetson ARGUS camera:
   ```bash
-  python yolo_track_lock.py --model yolo11nvisrec71.engine --source jetson --enable-lock --display
+  python yolo_track_lock.py --model yolo11n.engine --source jetson --enable-lock --display
   ```
 
 ### jetson_camera_inference.py
@@ -123,7 +123,7 @@ Export a YOLO model to TensorRT with static shapes and FP16:
 ```bash
 python export_tensorrt_engine.py
 ```
-Outputs: `yolo11nvisrec71.engine` in the project root.
+Outputs: `yolo11n.engine` in the project root.
 
 ## Outputs
 - Annotated video: `<source_name>_locked.mp4` (when `--save-vid`)
