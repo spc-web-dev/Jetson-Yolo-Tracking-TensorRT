@@ -37,6 +37,24 @@ Notes for Jetson:
 - Install TensorRT and CUDA via JetPack. The Python package `nvidia-tensorrt` is generally not needed on Jetson.
 - Tested on JetPack 6.2 (L4T r36.x) on Jetson Orin NX.
 
+Jetson best practices and tips:
+- Enable MAX power mode and clocks for consistent benchmarking and maximum performance:
+  ```bash
+  sudo nvpmodel -m 0
+  sudo jetson_clocks
+  ```
+- Monitor system and confirm JetPack details with jetson-stats:
+  ```bash
+  sudo apt update
+  sudo pip install jetson-stats
+  sudo reboot
+  jtop
+  ```
+- Install Ultralytics, PyTorch, and TorchVision versions compatible with your JetPack release. Prefer NVIDIA/JetPack-provided wheels for PyTorch/TorchVision. TensorRT is bundled with JetPack.
+- For best inference performance, convert to TensorRT and use FP16 when possible. INT8 requires calibration but can provide further speedups.
+- Ensure OpenCV has GStreamer enabled for ARGUS camera and network streams (RTSP/RTMP/HTTP).
+
+
 ## Model Preparation
 You can use either a prebuilt TensorRT engine (`.engine`) or export one from a YOLO model (`.pt`).
 
@@ -138,5 +156,14 @@ Outputs: `yolo11n.engine` in the project root.
 - For trackers, ensure dependencies are installed (see `requirements.txt`, includes `lapx`, `scipy`).
 - If `.engine` loading fails, regenerate the engine to match your device and TensorRT version.
 
+Additional Jetson resources:
+- Installing Ultralytics, PyTorch/TorchVision, and onnxruntime-gpu on specific JetPack versions
+- TensorRT usage guidance (conversion and running), optional DLA usage, and best practices
+- YOLO11 benchmark charts for multiple Jetson devices (AGX Orin, Orin NX, Orin Nano)
+
+See the Ultralytics NVIDIA Jetson guide for details: [Ultralytics YOLO Docs – NVIDIA Jetson](https://docs.ultralytics.com/guides/nvidia-jetson/).
+
 ## License
 This repository is provided for research and production use. See source headers for details. 
+
+Acknowledgment: This project’s Jetson notes and recommendations were informed by the Ultralytics NVIDIA Jetson guide: [https://docs.ultralytics.com/guides/nvidia-jetson/](https://docs.ultralytics.com/guides/nvidia-jetson/).
