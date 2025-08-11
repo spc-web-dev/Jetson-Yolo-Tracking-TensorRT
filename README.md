@@ -78,6 +78,11 @@ Key arguments:
 - `--device` (e.g., `0`, `cpu`), `--display`, `--verbose`, `--show-fps`
 - Locking: `--enable-lock`, `--lock-id <int>`, `--lock-class <name|id>`, `--highlight-color R,G,B`
 
+Source modes:
+- Video file: path ending with `.mp4`, `.avi`, `.mov`, `.mkv`
+- Jetson ARGUS camera: `--source camera` or `jetson` or `camsrc=1`
+- Generic camera/stream: numeric index (e.g., `0`) or URL starting with `rtsp://`, `http://`, `https://`, or `rtmp://`
+
 Controls during runtime:
 - `l`: toggle lock mode
 - `c`: clear locked object
