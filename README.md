@@ -25,9 +25,6 @@ cd Yolo-TensorRT-Tracking-and-Jetson-Camera-Toolkit
 
 # Create a virtual environment (recommended)
 python -m venv .venv
-# Windows
-. .venv\Scripts\activate
-# Linux/macOS
 source .venv/bin/activate
 
 # Install dependencies
