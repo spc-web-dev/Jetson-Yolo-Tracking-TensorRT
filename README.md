@@ -20,8 +20,8 @@ A production-ready toolkit for real-time YOLO detection, multi-object tracking, 
 ## Clone and Setup
 ```bash
 # Clone the repository
-git clone https://github.com/<your-user>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/ammarmalik17/Yolo-TensorRT-Tracking-and-Jetson-Camera-Toolkit.git
+cd Yolo-TensorRT-Tracking-and-Jetson-Camera-Toolkit
 
 # Create a virtual environment (recommended)
 python -m venv .venv
