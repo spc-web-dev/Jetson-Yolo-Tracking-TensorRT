@@ -38,6 +38,7 @@ pip install -r requirements.txt
 Notes for Jetson:
 - Prefer system OpenCV with GStreamer (provided by JetPack). The requirements file avoids pip-OpenCV on aarch64.
 - Install TensorRT and CUDA via JetPack. The Python package `nvidia-tensorrt` is generally not needed on Jetson.
+- Tested on JetPack 6.2 (L4T r36.x) on Jetson Orin NX.
 
 ## Model Preparation
 You can use either a prebuilt TensorRT engine (`.engine`) or export one from a YOLO model (`.pt`).
