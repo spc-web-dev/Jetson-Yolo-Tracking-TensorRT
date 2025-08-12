@@ -37,6 +37,34 @@ Notes for Jetson:
 - Install TensorRT and CUDA via JetPack. The Python package `nvidia-tensorrt` is generally not needed on Jetson.
 - Tested on JetPack 6.2 (L4T r36.x) on Jetson Orin NX.
 
+### Prefer Jetson AI Lab PyPI mirror (Jetson-only)
+For faster, more reliable installs on Jetson, prefer prebuilt wheels from the Jetson AI Lab PyPI mirror. It hosts wheels tailored to specific JetPack (jp6/jp7) and CUDA variants (cu126, cu129, cu130), reducing build times and preventing ABI mismatches.
+
+- Why use it:
+  - Prebuilt, Jetson-compatible wheels (PyTorch/TorchVision/Ultralytics deps, etc.)
+  - Avoids slow or failing source builds on-device
+  - Ensures CUDA/TensorRT compatibility aligned with your JetPack
+
+- Mirror: [Jetson AI Lab PyPI mirror](https://pypi.jetson-ai-lab.io/)
+
+- Quick usage (choose the index matching your JetPack/CUDA, e.g., jp6 + cu130):
+  ```bash
+  # Prefer the mirror but allow fallback to PyPI when a package isn't available
+  pip install --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu130/+simple/ -r requirements.txt
+  ```
+
+- Optional pip config (persistent): create `~/.config/pip/pip.conf` with:
+  ```ini
+  [global]
+  extra-index-url = https://pypi.jetson-ai-lab.io/jp6/cu130/+simple/
+  ```
+  Then run the usual install:
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+If you're unsure which index to use: `jp6` corresponds to JetPack 6, `jp7` to JetPack 7; pick the `cuXXX` that matches your CUDA (e.g., 12.6 → cu126, 12.9 → cu129, 13.0 → cu130). If a package isn't present on the mirror, pip will fall back to PyPI when using `--extra-index-url`.
+
 Jetson best practices and tips:
 - Enable MAX power mode and clocks for consistent benchmarking and maximum performance:
   ```bash
